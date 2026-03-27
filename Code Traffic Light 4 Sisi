@@ -1,0 +1,56 @@
+// INI ARRAY PIN
+// Menyimpan pin untuk setiap lampu pada 4 arah
+// Urutan: Utara, Timur, Selatan, Barat
+int merah[]  = {2, 5, 8, 11};   // Lampu merah
+int kuning[] = {3, 6, 9, 12};   // Lampu kuning
+int hijau[]  = {4, 7, 10, 13};  // Lampu hijau
+
+// SETUP
+void setup() {
+  // Mengatur semua pin sebagai OUTPUT
+  for (int i = 0; i < 4; i++) {
+    pinMode(merah[i], OUTPUT);
+    pinMode(kuning[i], OUTPUT);
+    pinMode(hijau[i], OUTPUT);
+  }
+}
+
+// SEMUA MERAH
+void semuaMerah() {
+  // Mengaktifkan semua lampu merah
+  for (int i = 0; i < 4; i++) {
+    digitalWrite(merah[i], HIGH);   // Merah nyala
+    digitalWrite(kuning[i], LOW);   // Kuning mati
+    digitalWrite(hijau[i], LOW);    // Hijau mati
+  }
+}
+
+// AKTIFKAN SATU SIMPANG
+void aktifkanSimpang(int i) {
+  semuaMerah(); // Kondisi awal: semua merah
+
+  // Lampu HIJAU menyala selama 5 detik
+  digitalWrite(merah[i], LOW);   // Matikan merah
+  digitalWrite(hijau[i], HIGH);  // Nyalakan hijau
+  delay(5000);
+
+  // KUNING kedip 3x (±2 detik)
+  digitalWrite(hijau[i], LOW);   // Matikan hijau
+  for (int j = 0; j < 3; j++) {
+    digitalWrite(kuning[i], HIGH); // Kuning nyala
+    delay(300);
+    digitalWrite(kuning[i], LOW);  // Kuning mati
+    delay(300);
+  }
+
+  // Setelah itu kembali ke merah
+  digitalWrite(merah[i], HIGH);
+}
+
+// LOOP 
+void loop() {
+  // Menjalankan lampu secara bergantian
+  for (int i = 0; i < 4; i++) {
+    aktifkanSimpang(i); // Utara → Timur → Selatan → Barat
+  }
+}
